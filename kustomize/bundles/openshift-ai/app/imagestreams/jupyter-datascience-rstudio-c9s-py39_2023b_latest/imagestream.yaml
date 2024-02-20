@@ -1,0 +1,26 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: jupyter-datascience-rstudio-c9s-py39_2023b_latest
+  namespace: redhat-ods-applications
+  labels:
+    opendatahub.io/notebook-image: "true"
+  annotations:
+    opendatahub.io/notebook-image-url: "https://github.com/opendatahub-io-contrib/workbench-images"
+    opendatahub.io/notebook-image-name: "Datascience + RStudio JupyterLab Notebook image on Centos Stream 9 with Python 3.9"
+    opendatahub.io/notebook-image-desc: |-
+      RStudio is an integrated development environment (IDE) for R and Python.
+      It includes a console, syntax-highlighting editor that supports direct code execution, and tools for plotting, history, debugging, and workspace management.
+spec:
+  lookupPolicy:
+    local: true
+  tags:
+    - name: latest
+      annotations: null
+      from:
+        kind: DockerImage
+        name: 'quay.io/opendatahub-contrib/workbench-images:jupyter-datascience-rstudio-c9s-py39_2023b_latest'
+      importPolicy:
+        scheduled: true
+      referencePolicy:
+        type: Source

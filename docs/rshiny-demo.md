@@ -1,5 +1,7 @@
 # R Shiny demo on NERC
 
+[![R Shiny ecological forecasting sites app](../pictures/rshiny-app-eco-forecast-sites.png)](../rshiny-app-eco-forecast-sites.png)
+
 R Shiny is package that makes it easy to build interactive web apps straight from R & Python, [see the Shiny website](https://shiny.posit.co/). 
 
 See how we can develop a Shiny application directly in our NERC OpenShift AI project workbench to map ecological forecasting sites in a PostgreSQL database. We will run the Shiny app and make it available ata new route in the browser. 
@@ -122,4 +124,4 @@ git clone https://github.com/computate-org/pecan-unconstrained-forecast-course.g
 ## Next...
 If you have successfully ran all of the commands above, congratulations, you are ready to move on to the next notebook in the course. 
 - If you have additional questions or issues, please [create an issue for the course here](https://github.com/computate-org/pecan-unconstrained-forecast-course/issues). 
-- Otherwise, please continue to the next notebook [../03-prepare-rshiny-demo.ipynb](03-prepare-rshiny-demo.ipynb). 
+- Otherwise, please continue to the next notebook [03-prepare-rshiny-demo.ipynb](../03-prepare-rshiny-demo.ipynb). 

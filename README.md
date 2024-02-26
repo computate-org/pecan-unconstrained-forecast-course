@@ -137,5 +137,8 @@ Return to your OpenShift AI Workbench and clone the pecan-unconstrained-forecast
 git clone https://github.com/computate-org/pecan-unconstrained-forecast-course.git ~/pecan-unconstrained-forecast-course
 ```
 
-Open up the first course
+## Next...
+If you have successfully ran all of the commands above, congratulations, you are ready to move on to the next notebook in the course. 
+- If you have additional questions or issues, please [create an issue for the course here](https://github.com/computate-org/pecan-unconstrained-forecast-course/issues). 
+- Otherwise, please continue to the next notebook [01-install-pecan.ipynb](01-install-pecan.ipynb). 
 

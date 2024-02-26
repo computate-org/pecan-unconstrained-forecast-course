@@ -121,6 +121,7 @@ In the terminal in your workbench, clone the course into your home directory.
 ```bash
 git clone https://github.com/computate-org/pecan-unconstrained-forecast-course.git ~/pecan-unconstrained-forecast-course
 ```
+
 ## Next...
 If you have successfully ran all of the commands above, congratulations, you are ready to move on to the next notebook in the course. 
 - If you have additional questions or issues, please [create an issue for the course here](https://github.com/computate-org/pecan-unconstrained-forecast-course/issues). 

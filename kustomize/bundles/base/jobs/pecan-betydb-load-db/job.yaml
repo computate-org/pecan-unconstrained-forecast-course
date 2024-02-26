@@ -1,0 +1,81 @@
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: pecan-betydb-load-db
+  namespace: pecan
+  labels:
+    job-name: pecan-betydb-load-db
+spec:
+  parallelism: 1
+  completions: 1
+  backoffLimit: 6
+  template:
+    metadata:
+      name: pecan-load-db
+      creationTimestamp: null
+      labels:
+        job-name: pecan-betydb-load-db
+    spec:
+      initContainers:
+        - name: check-postgresql
+          image: 'ncsa/checks:1.0.1'
+          env:
+            - name: PGHOST
+              value: pecan-postgresql
+            - name: PGPORT
+              value: '5432'
+            - name: PGDATABASE
+              value: postgres
+            - name: PGUSER
+              value: postgres
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pecan-betydb
+                  key: postgresqlPassword
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      containers:
+        - name: bety-init
+          image: 'pecan/db:latest'
+          env:
+            - name: PGHOST
+              value: pecan-postgresql
+            - name: PGPORT
+              value: '5432'
+            - name: PGDATABASE
+              value: postgres
+            - name: PGUSER
+              value: postgres
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pecan-betydb
+                  key: postgresqlPassword
+            - name: BETYUSER
+              value: bety
+            - name: BETYPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pecan-betydb
+                  key: betyPassword
+            - name: BETYDATABASE
+              value: bety
+            - name: LOCAL_SERVER
+              value: '99'
+            - name: REMOTE_SERVERS
+              value: '0, 1, 2, 5'
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Never
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  completionMode: NonIndexed
+  suspend: false
+

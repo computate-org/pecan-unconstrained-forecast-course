@@ -1,0 +1,131 @@
+kind: CronJob
+apiVersion: batch/v1
+metadata:
+  name: harv-metdownload-efi
+spec:
+  schedule: 0 13 * * *
+  concurrencyPolicy: Allow
+  suspend: false
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+    spec:
+      backoffLimit: 1
+      template:
+        metadata:
+          name: harv-metdownload-efi
+          creationTimestamp: null
+        spec:
+          volumes:
+            - name: pecan-unconstrained-forecast-project
+              persistentVolumeClaim:
+                claimName: pecan-unconstrained-forecast-project
+          containers:
+            - resources:
+                limits:
+                  cpu: '1'
+                  memory: 2Gi
+                requests:
+                  cpu: '1'
+                  memory: 2Gi
+              terminationMessagePath: /dev/termination-log
+              name: pecan-unconstrained-forecast
+              command:
+                - Rscript
+                - pecan/scripts/HARV_metdownload_efi.R
+                - --start.date 2022-05-19
+                - --jumpback.date $(date -d "yesterday 13:00" '+%Y-%m-%d')
+              env:
+                - name: MINIO_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: s3-bucket
+                      key: BUCKET_HOST
+                - name: MINIO_PORT
+                  valueFrom:
+                    secretKeyRef:
+                      name: s3-bucket
+                      key: BUCKET_PORT
+                - name: BUCKET_REGION
+                  valueFrom:
+                    secretKeyRef:
+                      name: s3-bucket
+                      key: BUCKET_REGION
+                - name: MINIO_BUCKET
+                  valueFrom:
+                    secretKeyRef:
+                      name: s3-bucket
+                      key: BUCKET_NAME
+                - name: MINIO_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: s3-bucket
+                      key: AWS_ACCESS_KEY_ID
+                - name: MINIO_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: s3-bucket
+                      key: AWS_SECRET_ACCESS_KEY
+                - name: RABBITMQ_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: pecan-rabbitmq
+                      key: rabbitmq-password
+                - name: RABBITMQ_URI
+                  value: 'amqp://guest:$(RABBITMQ_PASSWORD)@pecan-rabbitmq/%2F'
+                - name: PGHOST
+                  value: pecan-postgresql
+                - name: PGPORT
+                  value: '5432'
+                - name: PGDATABASE
+                  value: postgres
+                - name: PGUSER
+                  value: postgres
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: pecan-postgresql
+                      key: postgresql-password
+                - name: BETYUSER
+                  value: bety
+                - name: BETYPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: pecan-betydb
+                      key: betyPassword
+                - name: BETYDATABASE
+                  value: bety
+                - name: NAME
+                  value: pecan-server
+                - name: FQDN
+                  value: pecan-server-pecan.apps-crc.testing
+                - name: SECRET_KEY_BASE
+                  valueFrom:
+                    secretKeyRef:
+                      name: pecan-betydb
+                      key: secretKey
+                - name: PECAN_HOME
+                  value: /opt/app-root/src/pecan
+                - name: NC_DIR
+                  value: /opt/app-root/src/forecast_example/GEFS-NC
+                - name: CLIM_DIR
+                  value: /opt/app-root/src/forecast_example/GEFS/noaa_clim
+                - name: PROJECT_DIR
+                  value: /opt/app-root/src/forecast_example
+                - name: MINIO_SCHEME
+                  value: https
+                - name: MINIO_PUBLIC
+                  value: 'FALSE'
+              imagePullPolicy: Always
+              volumeMounts:
+                - name: pecan-unconstrained-forecast-project
+                  mountPath: /opt/app-root/src
+              terminationMessagePolicy: File
+              image: 'quay.io/computateorg/pecan-unconstrained-forecast:latest'
+          restartPolicy: Never
+          terminationGracePeriodSeconds: 30
+          dnsPolicy: ClusterFirst
+          securityContext: {}
+          schedulerName: default-scheduler
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1

@@ -92,12 +92,16 @@ Wait for the workbench to say `Ready`.
 
 ### Grant default service account edit role in namespace
 
-To grant the default service account edit role privileges, you will use
-either your own terminal where you have logged in to OpenShift, or use
-the built-in OpenShift Terminal. We will grant edit privileges on the
+To grant the OpenShift AI workbench service account edit role privileges, 
+you will use either your own terminal where you have logged in to OpenShift. 
+We will grant edit privileges on the
 default service account, as well as edit privileges on roles and
-rolebindings in the namespace so that the default service account can
+rolebindings in the namespace so that the workbench service account can
 deploy resources in your namespace.
+
+Run the commands below in your terminal after logging into the CLI above. 
+
+Here we assume that you created an OpenShift AI workbench called `pecan-unconstrained-forecast`. 
 
 ```
 oc create rolebinding pecan-unconstrained-forecast-edit --clusterrole=edit \

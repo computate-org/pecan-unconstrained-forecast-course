@@ -37,12 +37,6 @@ oc apply -k ~/.local/src/pecan-unconstrained-forecast-course/kustomize/bundles/o
 oc -n redhat-ods-operator wait csv -l operators.coreos.com/rhods-operator.redhat-ods-operator="" --for=jsonpath={.status.phase}='Succeeded'
 ```
 
-As a cluster admin, deploy the required Role Bindings in the pecan namespace to run the containers. 
-
-```bash
-oc apply -k ~/.local/src/pecan-unconstrained-forecast-course/kustomize/bundles/pecan/base/
-```
-
 ### Deploy a Data Science Cluster
 
 Deploy a Data Science Cluster and wait for it to be ready. 
@@ -114,6 +108,12 @@ oc create role pecan-unconstrained-forecast-edit-rolebindings \
 
 oc create rolebinding pecan-unconstrained-forecast-edit-rolebindings --role=pecan-unconstrained-forecast-edit-rolebindings \
   --serviceaccount=$(oc get project -o jsonpath={.items[0].metadata.name}):pecan-unconstrained-forecast
+```
+
+As a cluster admin, deploy the required Role Bindings in the pecan namespace to run the containers. 
+
+```bash
+oc apply -k ~/.local/src/pecan-unconstrained-forecast-course/kustomize/bundles/pecan/base/
 ```
 
 ## RSync the forecast_example directory to the pod

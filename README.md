@@ -150,7 +150,7 @@ oc create role python-edit-rolebindings \
   --resource=roles,rolebindings
 
 oc create rolebinding python-edit-rolebindings --role=python-edit-rolebindings \
-  --serviceaccount=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace):python
+  --serviceaccount=$(oc project -q):python
 ```
 
 # OpenShift AI

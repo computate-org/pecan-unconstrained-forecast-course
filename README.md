@@ -142,7 +142,7 @@ deploy resources in your namespace.
 
 ```
 oc create rolebinding python-edit --clusterrole=edit \
-  --serviceaccount=$(oc get project -q):python
+  --serviceaccount=$(oc project -q):python
 
 oc create role python-edit-rolebindings \
   --verb=get,list,watch,create,update,patch,delete \
